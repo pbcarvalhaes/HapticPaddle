@@ -1,6 +1,7 @@
 import sys, pygame
 import serial as sr
 import math
+import io
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QFileDialog
 from PyQt5.QtWidgets import QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QComboBox, QPlainTextEdit
@@ -29,7 +30,7 @@ class HapticPaddleGUI(QWidget):
 		self.mainbox.addWidget(self.console)
 		
 		self.setLayout(self.mainbox)
-	def setSubMenu(self, mainMenu):
+	def addSubMenu(self, mainMenu):
 		#self.menu = mainMenu.addMenu( hash(self) ) #find a way to make unique identifiable names
 		self.menu = mainMenu.addMenu( "Paddle" + str(self.paddle.times) )
 	
@@ -42,6 +43,7 @@ class HapticPaddle():
 		self.currentPort = None
 		self.serial = None
 		HapticPaddle.times += 1
+		self.textStream = io.StringIO()
 		
 	def coupleSerial(self):
 		try:
