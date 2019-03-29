@@ -58,8 +58,8 @@ void setup() {
     pinMode(ENCODER_A, INPUT);
     pinMode(ENCODER_B, INPUT);
 
-    attachInterrupt(ENCODER_A, conta_A, CHANGE);
-    attachInterrupt(ENCODER_B, conta_B, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(ENCODER_A), conta_A, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(ENCODER_B), conta_B, CHANGE);
 
     
 }
