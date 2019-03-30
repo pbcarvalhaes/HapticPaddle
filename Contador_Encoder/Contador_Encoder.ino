@@ -58,10 +58,12 @@ void setup() {
     pinMode(ENCODER_A, INPUT);
     pinMode(ENCODER_B, INPUT);
 
+    state_A = (digitalRead(ENCODER_A) == HIGH);
+    state_B = (digitalRead(ENCODER_B) == HIGH);
+
     attachInterrupt(digitalPinToInterrupt(ENCODER_A), conta_A, CHANGE);
     attachInterrupt(digitalPinToInterrupt(ENCODER_B), conta_B, CHANGE);
 
-    
 }
 
 void loop() {
