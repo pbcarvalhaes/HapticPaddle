@@ -1,11 +1,9 @@
 #define ENCODER_A 2
 #define ENCODER_B 3
-#define TEMPO_A 10
+#define TEMPO_A 10000
 
 volatile long pos = 0;
-double Angulo = 0;
-volatile int volta= 0;
-float velocidade = 0;
+double velocidade = 0;
 double pos_ant = 0;
 double pos_ag = 0;
 unsigned long tempo_ant = 0;
@@ -14,74 +12,52 @@ volatile bool state_A = true;
 volatile bool state_B = true;
 //Do not use volatile variables directly!
 
+const double to_radians = 2.0*(PI/48.0)/74.83;
+
 void conta_A() {
     if(state_A){
         if(state_B){
-            pos+=1;
+            pos++;
         }
         else{
-            pos-=1;
+            pos--;
         }
     }
     else{
         if(state_B){
-            pos-=1;
+            pos--;
         }
         else{
-            pos+=1;
+            pos++;
         }
     }
     state_A = !state_A;
-
-    
-    /*if (Angulo > 180){
-      volta += Angulo / 360;
-      Angulo = (Angulo % 360) - 180; 
-    }
-    else{
-      if (Angulo < -180) {
-        volta -= Angulo / 360;
-        Angulo = (Angulo % 360) - 180;
-      }
-    }*/
 }
 void conta_A_K(){
-    pos += 1 - (2*(state_A|state_B));
+    pos += 1 - ((state_A|state_B)<<1);
     state_A = !state_A;
 }
 void conta_B() {
     if(state_B){
         if(state_A){
-            pos-=1;
+            pos--;
         }
         else{
-            pos+=1;
+            pos++;
         }
     }
     else{
         if(state_A){
-            pos+=1;
+            pos++;
         }
         else{
-            pos-=1;
+            pos--;
         }
     }
     state_B = !state_B;
-
-    
-    /*if (Angulo > 180){
-      volta += Angulo / 360;
-      Angulo = (Angulo % 360); 
-    }
-    else{
-      if (Angulo < -180) {
-        volta -= Angulo / 360;
-        Angulo = (Angulo % 360);
-      }
-    }*/
 }
 void conta_B_K(){
-    pos -= 1 - (2*(state_A|state_B));
+    pos -= 1 - ((state_A|state_B)<<1);
     state_B = !state_B;
 }
 
@@ -98,27 +74,23 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(ENCODER_A), conta_A, CHANGE);
     attachInterrupt(digitalPinToInterrupt(ENCODER_B), conta_B, CHANGE);
 
-    tempo_ag = millis();
+    tempo_ag = micros();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-  if(millis() - tempo_ag > TEMPO_A){
+  if(micros() - tempo_ag > TEMPO_A){
     tempo_ant = tempo_ag;
-    tempo_ag = millis();
+    tempo_ag = micros();
     
-    pos_ant = pos_ag; 
-    Angulo = (pos*2*(PI/48))/(74.83);
-    pos_ag = Angulo;
+    pos_ant = pos_ag;
+    pos_ag = pos*to_radians;
   
-    velocidade = (pos_ag-pos_ant)/(tempo_ag - tempo_ant);
+    velocidade = (pos_ag-pos_ant)/((tempo_ag - tempo_ant)/1000.0);
     
     Serial.println(1000*velocidade);
-    //Serial.print(" ");
-    //Serial.println(tempo_ag);
   }
-  //Serial.println(tempo_ag - tempo_ant);
 
   
 }
