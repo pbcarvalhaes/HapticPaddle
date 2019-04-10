@@ -89,7 +89,7 @@ void loop() {
   
     velocidade = (pos_ag-pos_ant)/((tempo_ag - tempo_ant)/1000.0);
     
-    Serial.println(1000*velocidade);
+    Serial.println(1000*velocidade, 5);
   }
 
   
