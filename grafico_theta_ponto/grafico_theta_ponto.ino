@@ -80,7 +80,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  if(micros() - tempo_ag > TEMPO_A){
+  if(micros() - tempo_ag >= TEMPO_A){
     tempo_ant = tempo_ag;
     tempo_ag = micros();
     
