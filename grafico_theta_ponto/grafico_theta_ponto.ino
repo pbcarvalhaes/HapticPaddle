@@ -87,9 +87,9 @@ void loop() {
     pos_ant = pos_ag;
     pos_ag = pos*to_radians;
   
-    velocidade = (pos_ag-pos_ant)/((tempo_ag - tempo_ant)/1000.0);
+    velocidade = 1000000.0*(pos_ag-pos_ant)/(tempo_ag - tempo_ant);
     
-    Serial.println(1000*velocidade, 5);
+    Serial.println(velocidade, 5);
   }
 
   
