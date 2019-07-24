@@ -1,10 +1,8 @@
-#import pygame, pyglet
 import sys
 import serial
 import math
 import socket
 
-#from PyQt5.QtCore import QObject, QRunnable, QThreadPool, pyqtSignal, pyqtSlot
 
 from multiprocessing import Process, Pipe, Value
 
@@ -56,8 +54,6 @@ if __name__ == "__main__":
 	gray = 25,25,25
 	white = 255,255,255
 
-	#ball = pygame.image.load("data/ball.png")
-	#ballRect = ball.get_rect()
 
 	defaultSize = 850,400
 	screen = pygame.display.set_mode(defaultSize, pygame.RESIZABLE)
@@ -83,7 +79,6 @@ if __name__ == "__main__":
 	interpolate = interpolator(0,100,0, screen.get_size()[0])
 
 	subScreenSurface.fill(gray)
-	#subScreenSurface.blit(ball, ballRect)
 
 	screen.blit(subScreenSurface,(0,0))
 
@@ -97,8 +92,6 @@ if __name__ == "__main__":
 
 	speed = 0.05
 
-	#clocky = pygame.time.Clock()
-	#clocky.tick(60)
 
 	clockpy = pyglet.clock.Clock()
 	clockpy.set_fps_limit(60)
@@ -106,19 +99,11 @@ if __name__ == "__main__":
 	#line = ser.readline()
 	#ballPos = int(line.strip())
 	#ballPos = screen.get_size()[0]//2
-	ballPos = 50
+	
 	maxSpeed = 0
-
+	ballPos = 50
 	ball2Pos = 0
-	#ball2Pos = 50
-
-	# worker = Worker()
-	# worker.signals.pos.connect(player2)
-	# worker.signals.testy.connect(testSlot)
-	# pool = QThreadPool()
-	# pool.start(worker)
-	#parent_conn1, child_conn1 = Pipe()
-	#parent_conn2, child_conn2 = Pipe()
+	
 	player1 = Value('I', 50)
 	player2 = Value('I', 80)
 	p = Process(target=f, args=(player1, player2))
@@ -128,7 +113,6 @@ if __name__ == "__main__":
 	accumulated = 0
 	print("hello")
 	while 1:
-		#time = clocky.tick(60)
 		time = clockpy.tick()
 		time = 1000*time
 		
@@ -150,8 +134,6 @@ if __name__ == "__main__":
 				scale = (scale[0], scale[0]*defaultSize[1]//defaultSize[0])
 				print(scale)
 				rectSSS = (0,(event.dict['size'][1]-scale[1])//2)
-				#scaledSSS=pygame.transform.scale(subScreenSurface, scale)
-				#scaledSSS=pygame.transform.smoothscale(subScreenSurface, scale)
 			elif (event.type==pygame.KEYDOWN):
 				if(event.dict['key']==pygame.K_RIGHT):
 					ballPos+= (time*speed)//0.8
@@ -167,31 +149,26 @@ if __name__ == "__main__":
 
 		ballPos = max(0, min(ballPos, 100))
 
-		#parent_conn1.send(int(ballPos))
+		
 		player1.value = int(ballPos)
 
-		#ball2Pos = 50 + 45*math.sin(2*math.pi*(accumulated)/5000)
-		#ball2Pos = 50
-		#ball2Pos = parent_conn2.recv()
+		
 		ball2Pos = player2.value
 		
 		ballRect.x = (interpolate(ballPos)) - ball.get_size()[0]//2
 		ballRect.y = 250
 		
-		#print(ball2Pos)
+		
 		ball2Rect.x = (interpolate(ball2Pos)) - ball2.get_size()[0]//2
 		ball2Rect.y = 0
 		
 		subScreenSurface.fill(gray)
-		##subScreenSurface.blit(back, (0,0))
 		subScreenSurface.blit(ball, ballRect)
 		subScreenSurface.blit(ball2, ball2Rect)
 		
 		scaledSSS=pygame.transform.smoothscale(subScreenSurface, scale)
 		screen.fill(white)
 		screen.blit(scaledSSS,rectSSS)
-		#pygame.display.update(ballRect)
-		#pygame.display.update(ball2Rect)
 		pygame.display.flip()
 
 
