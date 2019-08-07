@@ -12,15 +12,11 @@ BUF_SIZE = 30
 
 #Parallelize the server stuff
 def f(T_PORT, player1, player2):
-
 	print("I'm",socket.gethostbyname(socket.gethostname()))
 	TCP_IP = socket.gethostname()
-	#TCP_IP = '192.168.0.28'
 
 	with socket.socket (socket.AF_INET, socket.SOCK_STREAM) as k:
-		print("Before")
 		k.bind((TCP_IP, T_PORT))
-		print("I got here")
 		k.listen(2)
 		con, addr = k.accept()
 		print ('Connection Address is: ' , addr)
@@ -114,7 +110,7 @@ if __name__ == "__main__":
 	p.start()
 
 	accumulated = 0
-	print("hello")
+	
 	while 1:
 		time = clockpy.tick()
 		time = 1000*time

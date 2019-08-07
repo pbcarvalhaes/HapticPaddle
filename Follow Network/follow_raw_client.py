@@ -9,7 +9,7 @@ from multiprocessing import Process, Pipe, Value
 T_PORT = 65435
 
 #TCP_IP = '127.0.0.1'
-TCP_IP = '192.168.0.28'
+TCP_IP = '10.147.191.171'
 BUF_SIZE = 1024
 
 #Parallelize the server stuff
