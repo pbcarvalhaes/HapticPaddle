@@ -1,6 +1,7 @@
 import sys, pygame
 import serial as sr
 import math
+import time
 
 #pygame.init()
 
@@ -23,8 +24,10 @@ get_time = pygame.time.get_ticks
 time = get_time()
 sum = 0
 
+filename = "data_" + time.strftime("%Y.%m.%d_%H.%M.%S") + ".txt"
+
 print("hello \n")
-with open('data.txt', 'w') as fp:
+with open(filename, 'w') as fp:
 	while sum < 10000:
 		time = clocky.tick(10)
 		if(ser):
