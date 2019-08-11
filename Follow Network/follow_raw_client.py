@@ -47,7 +47,8 @@ def interpolator(left_min, left_max, right_min, right_max):
 
 
 if __name__ == "__main__":
-	import pygame, pyglet
+	import pygame
+	#import pyglet
 
 	pygame.init()
 
@@ -92,9 +93,9 @@ if __name__ == "__main__":
 
 	speed = 0.05
 
-
-	clockpy = pyglet.clock.Clock()
-	clockpy.set_fps_limit(60)
+	clocky = pygame.time.Clock()
+	#clockpy = pyglet.clock.Clock()
+	#clockpy.set_fps_limit(60)
 
 	#line = ser.readline()
 	#ballPos = int(line.strip())
@@ -113,8 +114,9 @@ if __name__ == "__main__":
 	accumulated = 0
 	print("hello")
 	while 1:
-		time = clockpy.tick()
-		time = 1000*time
+		#time = clockpy.tick()
+		time = clocky.tick_busy_loop(60)
+		#time = 1000*time
 		
 		accumulated += time
 		
