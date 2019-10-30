@@ -8,8 +8,8 @@ from multiprocessing import Process, Pipe, Value
 
 T_PORT = 65435
 
-#TCP_IP = '127.0.0.1'
-TCP_IP = '10.147.191.171'
+TCP_IP = '127.0.0.1'
+#TCP_IP = '10.147.191.171'
 BUF_SIZE = 1024
 
 #Parallelize the server stuff
@@ -37,18 +37,17 @@ def f(player1, player2):
 
 #also need to paralellize the input
 
-def interpolator(left_min, left_max, right_min, right_max):
-	leftSpan = left_max - left_min
-	rightSpan = right_max - right_min
-	scaleFactor = float(rightSpan)/float(leftSpan)
-	def interpol_funct(value):
-		return right_min + (value-left_min)*scaleFactor
-	return interpol_funct
-
 
 if __name__ == "__main__":
 	import pygame
 	#import pyglet
+	def interpolator(left_min, left_max, right_min, right_max):
+		leftSpan = left_max - left_min
+		rightSpan = right_max - right_min
+		scaleFactor = float(rightSpan)/float(leftSpan)
+		def interpol_funct(value):
+			return right_min + (value-left_min)*scaleFactor
+		return interpol_funct
 
 	pygame.init()
 

@@ -1,7 +1,7 @@
 import sys, pygame
 import serial as sr
 import math
-import time
+import time as time_module
 
 #pygame.init()
 
@@ -24,7 +24,7 @@ get_time = pygame.time.get_ticks
 time = get_time()
 sum = 0
 
-filename = "data_" + time.strftime("%Y.%m.%d_%H.%M.%S") + ".txt"
+filename = "data_" + time_module.strftime("%Y.%m.%d_%H.%M.%S") + ".txt"
 
 print("hello \n")
 with open(filename, 'w') as fp:

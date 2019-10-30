@@ -1,4 +1,4 @@
-import serial
+import serial as sr
 import math
 import socket
 
@@ -38,19 +38,47 @@ def f(T_PORT, player1, player2):
 	print("Process finished")
 
 #also need to paralellize the input
+def ard(ser, potencio):
+	try:
+		#ser = sr.Serial(S_PORT, timeout=0.01)
+		ser = sr.Serial("COM3", timeout=0.1)
+		print(ser.name)
+	except sr.SerialException as msg:
+		print( "Error opening serial port %s" % msg)
+		print("Failed to connect to serial")
+		ser = False
+	if(ser):
+		while(True):
+			lineraw = ser.readline()
+			line = str(lineraw, 'utf-8')
+			line = line.strip()
+			#lines = "".join([str(x, 'utf-8') for x in lineraw])
+			#lines = lines.strip().split('\r\n')
+			#lines = [x for x in lines if len(x)>0]
+			#lines = "".join(lines)
+			#lines = lines.strip().split('\n')
+			#lines = "".join(lines)
+			#print(line)
+			#lines = lineraw
+			try:
+				value = float(line)
 
-def interpolator(left_min, left_max, right_min, right_max):
-	leftSpan = left_max - left_min
-	rightSpan = right_max - right_min
-	scaleFactor = float(rightSpan)/float(leftSpan)
-	def interpol_funct(value):
-		return right_min + (value-left_min)*scaleFactor
-	return interpol_funct
-
+				#print(value)
+				potencio.value = value
+			except ValueError:
+				print("Error: ", lineraw)
 
 if __name__ == "__main__":
 	import sys, pygame
 	#import pyglet
+
+	def interpolator(left_min, left_max, right_min, right_max):
+		leftSpan = left_max - left_min
+		rightSpan = right_max - right_min
+		scaleFactor = float(rightSpan)/float(leftSpan)
+		def interpol_funct(value):
+			return right_min + (value-left_min)*scaleFactor
+		return interpol_funct
 
 	pygame.init()
 
@@ -109,8 +137,12 @@ if __name__ == "__main__":
 
 	player1 = Value('I', 30)
 	player2 = Value('I', 10)
-	p = Process(target=f, args=(65435,player1, player2), daemon=True)
+	p = Process(target=f, args=(65435, player1, player2), daemon=True)
 	p.start()
+
+	potencio = Value('f', 0)
+	p2 = Process(target=ard, args=("COM3", potencio), daemon=True)
+	p2.start()
 
 	accumulated = 0
 	
@@ -130,6 +162,7 @@ if __name__ == "__main__":
 			if (event.type == pygame.QUIT):
 				#ser.close()
 				p.terminate()
+				p2.terminate()
 				sys.exit(0)
 			elif (event.type==pygame.VIDEORESIZE):
 				screen=pygame.display.set_mode(event.dict['size'], pygame.RESIZABLE)
@@ -150,6 +183,7 @@ if __name__ == "__main__":
 		if not p.is_alive():
 			sys.exit(0)
 
+		ballPos = 50+50*potencio.value
 		ballPos = max(0, min(ballPos, 100))
 
 		
